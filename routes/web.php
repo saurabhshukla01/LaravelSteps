@@ -2,6 +2,26 @@
 
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Str;
+use App\Mail\SampleMail;
+
+$info = "hi , let's learn laravel 7";
+/*
+$info = Str::replaceFirst('hi','hello',$info);
+$info = Str::ucfirst($info);
+$info = Str::camel($info);
+*/
+
+// how to create new feature of laravel is name is  Fluent Strings | new feature :::::::
+
+$info = Str::of($info)
+                ->replaceFirst('hi','hello',$info)
+                ->ucfirst($info)
+                ->camel($info);
+
+// echo "<center><h1>".$info."</center></h1>";
+
+
 /*
 How to Call Api in Laravel 7.0 using Client http  : First create api and set url here after that its call easly.
 
@@ -30,8 +50,10 @@ How to Call Api in Laravel 7.0 using Client http  : First create api and set url
 
 Route::get('/', function () {
     return view('welcome');
-    // how to another way to redirect here
-    // return redirect('sample');
+});
+
+Route::get('mail', function () {
+    return new SampleMail();
 });
 
 /*
@@ -56,6 +78,8 @@ Route::view('example','example');
 Route::get('weathers','Weathers@list');
 Route::view('login','login');
 Route::post('login','Login@index');
+Route::view('image','image');
+Route::post('image','ImageStore@store');
 // Route::view('profile','profile');
 
 /*
@@ -69,10 +93,18 @@ Route::get('/profile', function () {
 
 Route::get('logout','Login@logout');
 
+
 Route::group(['middleware'=>['CustomAuth']],function(){
-	Route::view('profile','profile');
-	Route::get('/', function () {
-    	return view('welcome');
+	Route::get('profile', function () {
+    	return view('profile');
 	});
 
 });
+
+
+// Route::view('profile','profile');
+Route::get('users','UsersController@index');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
